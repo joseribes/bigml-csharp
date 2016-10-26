@@ -1,3 +1,5 @@
+using System;
+
 namespace BigML
 {
     /// <summary>
@@ -5,12 +7,12 @@ namespace BigML
     /// </summary>
     public partial class Client
     {
-        readonly string _apiKey;
-        readonly string _username;
-        readonly string _dev;
-        readonly string _protocol;
-        readonly string _VpcDomain;
-        readonly bool _useContextInAwaits;
+        internal string _apiKey;
+        internal string _username;
+        internal string _dev;
+        internal string _protocol;
+        internal string _VpcDomain;
+        internal bool _useContextInAwaits;
 
         const string DefaultDomain = "bigml.io";
         const string DefaultProtocol = "https";

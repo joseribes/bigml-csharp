@@ -7,8 +7,13 @@ namespace BigML
     /// <summary>
     /// Base class for response from BigML
     /// </summary>
-    public partial class Response
+    public partial class Response : Client
     {
+        public Response() : base("", "")
+        {
+
+        }
+
         /// <summary>
         /// HTTP status code.
         /// </summary>
@@ -109,5 +114,38 @@ namespace BigML
         {
             get { return Object.credits; }
         }
+
+
+        internal String ApiKey
+        {
+            get { return _apiKey; }
+            set { _apiKey = value; }
+        }
+
+        internal String UserName
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
+
+        internal String Dev
+        {
+            get { return _dev; }
+            set { _dev = value; }
+        }
+
+        internal String VpcDomain
+        {
+            get { return _VpcDomain; }
+            set { _VpcDomain = value; }
+        }
+
+        internal bool UseContextInAwaits
+        {
+            get { return _useContextInAwaits; }
+            set { _useContextInAwaits = value; }
+        }
+
+
     }
 }

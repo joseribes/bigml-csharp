@@ -45,16 +45,33 @@ namespace BigML
             {
                 case HttpStatusCode.Created:
                 case HttpStatusCode.Accepted:
-                    return new T {Object = resource, Location = response.Headers.Location };
+                    return new T {Object = resource, Location = response.Headers.Location,
+                        UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
 
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Unauthorized:
                 case HttpStatusCode.PaymentRequired:
                 case HttpStatusCode.NotFound:
-                    return new T {Object = resource};
+                    return new T {Object = resource,
+                        UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
 
                 default:
-                    return new T();
+                    return new T { UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
             }
         }
 
@@ -119,16 +136,34 @@ namespace BigML
             {
                 case HttpStatusCode.OK:
                 case HttpStatusCode.Accepted:
-                    return new T { Object = resource };
+                    return new T { Object = resource,
+                        UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
 
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Unauthorized:
                 case HttpStatusCode.PaymentRequired:
                 case HttpStatusCode.NotFound:
-                    return new T { Object = resource };
+                    return new T { Object = resource,
+                        UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
 
                 default:
-                    return new T();
+                    return new T {
+                        UserName = this._username,
+                        ApiKey = this._apiKey,
+                        Dev = this._dev,
+                        VpcDomain = this._VpcDomain,
+                        UseContextInAwaits = this._useContextInAwaits
+                    };
             }
         }
 
@@ -180,7 +215,7 @@ namespace BigML
         /// <summary>
         /// Extra operation on a resource.
         /// </summary>
-        public async Task<T> Operation<T>(string resourceId, string operation_name) where T: Response, new()
+        protected async Task<T> Operation<T>(string resourceId, string operation_name) where T: Response, new()
         {
             if (resourceId == null)
                 throw new ArgumentNullException("resourceId");
@@ -211,7 +246,7 @@ namespace BigML
         /// <summary>
         /// Extra operation on a resurce. I.e. download
         /// </summary>
-        public async Task<bool> Download(string resourceId, FileStream file)
+        protected async Task<bool> CommandDownload(string resourceId, FileStream file)
         {
             if (resourceId == null)
                 throw new ArgumentNullException("resourceId");
@@ -221,8 +256,6 @@ namespace BigML
             var response = await client.GetAsync(url).ConfigureAwait(_useContextInAwaits);
             await response.Content.CopyToAsync(file).ConfigureAwait(_useContextInAwaits);
 
-            file.Flush();
-            file.Close();
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
@@ -241,7 +274,6 @@ namespace BigML
         }
 
 
-
         /// <summary>
         /// Update a resource.
         /// </summary>
@@ -249,6 +281,7 @@ namespace BigML
         {
             return Update<T>(resource.Resource, name);
         }
+
 
         /// <summary>
         /// Update a resource with Json payload

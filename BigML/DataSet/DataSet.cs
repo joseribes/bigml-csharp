@@ -1,4 +1,6 @@
+using System.IO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BigML
 {
@@ -146,6 +148,20 @@ namespace BigML
         public Status StatusMessage
         {
             get{ return new Status(Object.status); }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns></returns>
+        public async Task<bool> Download(FileStream fileStream)
+        {
+            bool result = await this.CommandDownload(this.Resource, fileStream);
+            fileStream.Flush();
+            fileStream.Close();
+
+            return result;
         }
     }
 }
